@@ -37,7 +37,7 @@ function getWeather(city) {
       icon = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
 
       $(".city-date").text(city + " (" + date + ")");
-      $(".temperature").text("Temparature: " + temperature + " ℉");
+      $(".temperature").text("Temperature: " + temperature + " ℉");
       $(".humidity").text("Humidity: " + humidity + "%");
       $(".wind-speed").text("Wind Speed: " + windSpeed + " MPH");
       $(".uvIndex").text(UVindex);
@@ -74,15 +74,18 @@ function getForecast(lat, lon) {
     lat +
     "&lon=" +
     lon +
-    "&exclude=current,minutely,hourly,alerts&appid=78704ab92df5e3b0514666d3a597d433";
+    "&exclude=current,minutely,hourly,alerts&appid=78704ab92df5e3b0514666d3a597d433&units=imperial";
   return url;
 }
 
 function loadForecastData(data, day) {
-  $(".day-" + day).text(data.dt);
-  $(".icon-" + day).text(data.weather[0].icon);
-  $(".temp-" + day).text(data.temp.day);
-  $(".humidity-" + day).text(data.humidity);
+  $(".day-" + day).text(moment.unix(data.dt).format("L"));
+  $(".icon-" + day).attr(
+    "src",
+    "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png"
+  );
+  $(".temp-" + day).text("Temp: " + data.temp.day + "℉");
+  $(".humidity-" + day).text("Humidity: " + data.humidity + "%");
 }
 
 updatePage();

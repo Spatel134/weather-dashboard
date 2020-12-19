@@ -49,3 +49,9 @@
   border-radius: 5px;
   background-color: greenyellow;
 }
+
+.fore {
+  width: 17%;
+  background-color: rgb(12, 84, 219);
+  color: white;
+}
