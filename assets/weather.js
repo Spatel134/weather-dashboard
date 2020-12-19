@@ -2,9 +2,9 @@ function updatePage(city) {}
 
 function getWeather(city) {
   var weatherURL =
-    "http://api.openweathermap.org/data/2.5/weather?q=units=imperial" +
+    "http://api.openweathermap.org/data/2.5/weather?q=" +
     city +
-    "&appid=";
+    "&appid=78704ab92df5e3b0514666d3a597d433&units=imperial";
 
   var date;
   var temperature;
@@ -19,6 +19,7 @@ function getWeather(city) {
     url: weatherURL,
     method: "GET",
   }).then(function (response) {
+    console.log(response);
     date = response.dt;
     icon = response.weather[0].icon;
     lat = response.coord.lat;
@@ -31,7 +32,6 @@ function getWeather(city) {
       url: getUV(lat, lon),
       method: "GET",
     }).then(function (response) {
-      console.log(response);
       UVindex = response.value;
       date = moment.unix(date).format("L");
       icon = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
@@ -42,6 +42,17 @@ function getWeather(city) {
       $(".wind-speed").text("Wind Speed: " + windSpeed + " MPH");
       $(".uvIndex").text(UVindex);
       $(".icon").attr("src", icon);
+
+      $.ajax({
+        url: getForecast(lat, lon),
+        method: "GET",
+      }).then(function (response) {
+        console.log(response.daily);
+
+        for (var i = 1; i < 6; i++) {
+          loadForecastData(response.daily[i], i);
+        }
+      });
     });
   });
 }
@@ -52,9 +63,26 @@ function getUV(lat, lon) {
     lat +
     "&lon=" +
     lon +
-    "&appid=";
+    "&appid=78704ab92df5e3b0514666d3a597d433";
 
   return uvURL;
+}
+
+function getForecast(lat, lon) {
+  var url =
+    "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+    lat +
+    "&lon=" +
+    lon +
+    "&exclude=current,minutely,hourly,alerts&appid=78704ab92df5e3b0514666d3a597d433";
+  return url;
+}
+
+function loadForecastData(data, day) {
+  $(".day-" + day).text(data.dt);
+  $(".icon-" + day).text(data.weather[0].icon);
+  $(".temp-" + day).text(data.temp.day);
+  $(".humidity-" + day).text(data.humidity);
 }
 
 updatePage();
