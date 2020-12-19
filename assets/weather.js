@@ -2,9 +2,9 @@ function updatePage(city) {}
 
 function getWeather(city) {
   var weatherURL =
-    "http://api.openweathermap.org/data/2.5/weather?q=" +
+    "http://api.openweathermap.org/data/2.5/weather?q=units=imperial" +
     city +
-    "&appid=78704ab92df5e3b0514666d3a597d433&units=imperial";
+    "&appid=";
 
   var date;
   var temperature;
@@ -52,7 +52,7 @@ function getUV(lat, lon) {
     lat +
     "&lon=" +
     lon +
-    "&appid=78704ab92df5e3b0514666d3a597d433";
+    "&appid=";
 
   return uvURL;
 }
