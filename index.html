@@ -53,11 +53,17 @@
         </div>
         <div class="col-sm-9 p-2">
           <div class="col-sm-12 p-2 border corner">
-            <div>Atlanta (Date)</div>
-            <div>Temperature</div>
-            <div>Humudity</div>
-            <div>Wind Speed</div>
-            <div>UV Index</div>
+            <div>
+              <span class="city-date">Atlanta (Date)</span
+              ><img class="icon mb-3" src="" />
+            </div>
+            <div class="temperature">Temperature</div>
+            <div class="humidity">Humudity</div>
+            <div class="wind-speed">Wind Speed</div>
+            <div class="row">
+              <div class="uvtext col-md-1">UV Index:</div>
+              <div class="uvIndex col-md-1 border"></div>
+            </div>
           </div>
           <div class="col-sm-12 pt-3">
             <div>5-Day Forecast:</div>
@@ -73,5 +79,6 @@
       </div>
     </div>
     <script src="./assets/weather.js"></script>
+    <script src="./assets/moment.js"></script>
   </body>
 </html>

@@ -27,3 +27,25 @@
 .corner {
   border-radius: 5px;
 }
+
+.city-date {
+  font-size: 35px;
+}
+
+.icon {
+  height: 50px;
+  width: 50px;
+}
+
+.uvtext {
+  width: 90px;
+  padding-right: 0px;
+}
+
+.uvIndex {
+  padding: 0px;
+  text-align: center;
+  width: 40px;
+  border-radius: 5px;
+  background-color: greenyellow;
+}
