@@ -1,4 +1,10 @@
-function updatePage(city) {}
+function updatePage() {
+  var city = $(".input").val();
+  if (city != "") {
+    getWeather(city);
+    $(".home").show();
+  }
+}
 
 function getWeather(city) {
   var weatherURL =
@@ -18,42 +24,71 @@ function getWeather(city) {
   $.ajax({
     url: weatherURL,
     method: "GET",
-  }).then(function (response) {
-    console.log(response);
-    date = response.dt;
-    icon = response.weather[0].icon;
-    lat = response.coord.lat;
-    lon = response.coord.lon;
-    temperature = response.main.temp;
-    windSpeed = response.wind.speed;
-    humidity = response.main.humidity;
+    error: function (err) {
+      console.log(err.responseText);
+      $(".home").hide();
+    },
+    success: function (response) {
+      var cities = [];
 
-    $.ajax({
-      url: getUV(lat, lon),
-      method: "GET",
-    }).then(function (response) {
-      UVindex = response.value;
-      date = moment.unix(date).format("L");
-      icon = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+      if (localStorage.getItem("cities") != null) {
+        cities = JSON.parse(localStorage.getItem("cities"));
+        console.log(cities);
+      }
 
-      $(".city-date").text(city + " (" + date + ")");
-      $(".temperature").text("Temperature: " + temperature + " ℉");
-      $(".humidity").text("Humidity: " + humidity + "%");
-      $(".wind-speed").text("Wind Speed: " + windSpeed + " MPH");
-      $(".uvIndex").text(UVindex);
-      $(".icon").attr("src", icon);
+      if (city != "" && !cities.includes(city)) {
+        cities.push(city);
+        localStorage.setItem("cities", JSON.stringify(cities));
+      }
+
+      $(".list-group").empty();
+      for (var i = 0; i < cities.length; i++) {
+        $(".list-group").prepend(
+          '<li class="list-group-item" onclick="getWeather(\'' +
+            cities[i] +
+            "')\">" +
+            cities[i] +
+            "</li>"
+        );
+      }
+
+      console.log(response);
+      date = response.dt;
+      icon = response.weather[0].icon;
+      lat = response.coord.lat;
+      lon = response.coord.lon;
+      temperature = response.main.temp;
+      windSpeed = response.wind.speed;
+      humidity = response.main.humidity;
 
       $.ajax({
-        url: getForecast(lat, lon),
+        url: getUV(lat, lon),
         method: "GET",
       }).then(function (response) {
-        console.log(response.daily);
+        UVindex = response.value;
+        date = moment.unix(date).format("L");
+        icon = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
 
-        for (var i = 1; i < 6; i++) {
-          loadForecastData(response.daily[i], i);
-        }
+        $(".city-date").text(city + " (" + date + ")");
+        $(".temperature").text("Temperature: " + temperature + " ℉");
+        $(".humidity").text("Humidity: " + humidity + "%");
+        $(".wind-speed").text("Wind Speed: " + windSpeed + " MPH");
+        $(".uvIndex").text(UVindex);
+        $(".icon").attr("src", icon);
+
+        $.ajax({
+          url: getForecast(lat, lon),
+          method: "GET",
+        }).then(function (response) {
+          console.log(response.daily);
+
+          for (var i = 1; i < 6; i++) {
+            loadForecastData(response.daily[i], i);
+          }
+          $(".home").show();
+        });
       });
-    });
+    },
   });
 }
 
