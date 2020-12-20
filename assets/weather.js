@@ -4,6 +4,20 @@ function updatePage() {
     getWeather(city);
     $(".home").show();
   }
+
+  if (localStorage.getItem("cities")) {
+    cities = JSON.parse(localStorage.getItem("cities"));
+    $(".list-group").empty();
+    for (var i = 0; i < cities.length; i++) {
+      $(".list-group").prepend(
+        '<li class="list-group-item" onclick="getWeather(\'' +
+          cities[i] +
+          "')\">" +
+          cities[i] +
+          "</li>"
+      );
+    }
+  }
 }
 
 function getWeather(city) {
@@ -74,6 +88,7 @@ function getWeather(city) {
         $(".humidity").text("Humidity: " + humidity + "%");
         $(".wind-speed").text("Wind Speed: " + windSpeed + " MPH");
         $(".uvIndex").text(UVindex);
+        $(".uvIndex").css({ backgroundColor: uvIndexColor(UVindex) });
         $(".icon").attr("src", icon);
 
         $.ajax({
@@ -121,6 +136,18 @@ function loadForecastData(data, day) {
   );
   $(".temp-" + day).text("Temp: " + data.temp.day + "℉");
   $(".humidity-" + day).text("Humidity: " + data.humidity + "%");
+}
+
+function uvIndexColor(number) {
+  if (number < 2) {
+    return "green";
+  } else if (number >= 2 && number <= 5) {
+    return "yellow";
+  } else if (number >= 6 && number <= 7) {
+    return "orange";
+  } else {
+    return "red";
+  }
 }
 
 updatePage();

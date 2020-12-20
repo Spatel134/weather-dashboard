@@ -55,3 +55,11 @@
   background-color: rgb(12, 84, 219);
   color: white;
 }
+
+.list-group li {
+  background-color: white;
+}
+
+.list-group li:hover {
+  background-color: rgb(172, 172, 165);
+}
